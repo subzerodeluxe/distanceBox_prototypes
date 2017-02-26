@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>add-sound</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+<ion-card>
+  <ion-card-content>
+   <button ion-button block outline icon-left
+    (click)="startRecording()">
+    <ion-icon name="microphone"></ion-icon>
+    Start Recording
+  </button>
+
+
+  <button ion-button block outline icon-left
+    (click)="stopRecording()">
+    <ion-icon name="pause"></ion-icon>
+  Stop Recording 
+  </button>
+  </ion-card-content>
+</ion-card>
+
+ <ion-card>
+  <ion-card-content>
+  <button ion-button block outline icon-left
+      (click)="startPlayback()">
+      <ion-icon name="play"></ion-icon>
+    Start Playback
+    </button>
+
+    <button ion-button block outline icon-left
+      (click)="stopPlayback()">
+      <ion-icon name="pause"></ion-icon>
+    Stop Playback 
+    </button>
+  </ion-card-content>
+ </ion-card>
+</ion-content>

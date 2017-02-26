@@ -1,0 +1,33 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button icon-only menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>image-list</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+   <button ion-button block outline icon-left
+    (click)="addNewPicture()">
+    <ion-icon name="add"></ion-icon>
+ Add New Picture
+  </button>
+
+  <ion-card *ngFor="let image of images" (click)="openImage(image)">
+    <img [src]="place.imageUrl">
+    <ion-card-content>
+      <ion-card-title>
+        {{ image.title }} {{ image.date }} 
+      </ion-card-title>
+      <p>{{ image.description }}</p>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
