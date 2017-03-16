@@ -4,13 +4,15 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 
 // import images 
 import { TabsPage } from '../pages/tabs/tabs';
-
+import { LoginPage } from '../pages/login/login'; 
 
 @Component({
   templateUrl: 'app.html'
 })
+
 export class MyApp {
-  rootPage = TabsPage;
+  //rootPage = TabsPage;
+  rootPage = LoginPage; 
   
   @ViewChild('nav') nav: NavController;
 

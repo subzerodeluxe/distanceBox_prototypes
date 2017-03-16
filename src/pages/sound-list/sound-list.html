@@ -13,6 +13,12 @@
 
 
 <ion-content padding>
+  <ion-row>
+    <ion-item>
+<div *ngIf="auth.authState">Logged in: {{auth.currentUser}}</div>
+    </ion-item>
+  </ion-row>
+  
   <button ion-button block outline icon-left 
   (click)="addNewRecording()">
   <ion-icon name="add"></ion-icon>

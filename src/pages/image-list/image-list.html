@@ -21,7 +21,7 @@
   </button>
 
   <ion-card *ngFor="let image of images" (click)="openImage(image)">
-    <img [src]="place.imageUrl">
+    <img [src]="image.imageUrl">
     <ion-card-content>
       <ion-card-title>
         {{ image.title }} {{ image.date }} 

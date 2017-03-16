@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-row>
+        <ion-item>
+            <div *ngIf="auth.authState">Logged in: {{auth.currentUser}}</div>
+        </ion-item>
+    </ion-row>
+
+  <ion-row>
+      <button (click)="logout()" ion-button block>Log out</button>
+  </ion-row>
+  <ion-row> 
+        <button (click)="loginWithFacebook()" ion-button block>Facebook login</button>
+    </ion-row>
+
+</ion-content>
