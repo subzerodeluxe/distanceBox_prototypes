@@ -16,7 +16,7 @@ import { AddSoundPage } from '../pages/add-sound/add-sound';
 import { MediaListPage } from '../pages/media-list/media-list';
 import { TakePicturePage } from '../pages/take-picture/take-picture';
 import { LoginPage } from '../pages/login/login';
-import { SignupPage } from '../pages/signup/signup';
+
 
 // setup Firebase credentials 
 export const firebaseConfig = {
@@ -36,8 +36,8 @@ export const firebaseConfig = {
     AddSoundPage,
     MediaListPage,
     TakePicturePage,
-    LoginPage,
-    SignupPage
+    LoginPage
+    
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -52,8 +52,8 @@ export const firebaseConfig = {
     AddSoundPage,
     MediaListPage,
     TakePicturePage,
-    LoginPage,
-    SignupPage
+    LoginPage
+    
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
   ImagesService, AuthProvider]

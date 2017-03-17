@@ -6,11 +6,14 @@
 
 
 <ion-content padding>
-  <ion-row>
-        <ion-item>
-            <div *ngIf="auth.authState">Logged in: {{auth.currentUser}}</div>
-        </ion-item>
-    </ion-row>
+ <ion-list>
+    <ion-item>
+        <ion-avatar item-left>
+            <img *ngIf="auth.authState" src="{{auth.userImage}}">
+        </ion-avatar>
+        <h2 *ngIf="auth.authState">{{auth.userName}}</h2>
+    </ion-item>  
+</ion-list>
 
   <ion-row>
       <button (click)="logout()" ion-button block>Log out</button>

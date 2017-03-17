@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter, Inject} from '@angular/core';
 import { AuthProviders, AngularFire, FirebaseAuthState, AuthMethods, FirebaseApp } from 'angularfire2'; //Add FirebaseApp
 import { Observable } from "rxjs/Observable";
-import { Platform } from 'ionic-angular';
+import { Platform, AlertController } from 'ionic-angular';
 import { Facebook } from 'ionic-native';
 
 import { auth } from 'firebase'; //needed for the FacebookAuthProvider
@@ -12,7 +12,7 @@ export class AuthProvider {
   public onAuth: EventEmitter<FirebaseAuthState> = new EventEmitter();
   public firebase : any;
    
-   constructor(private af: AngularFire, @Inject(FirebaseApp)firebase: any,
+   constructor(private alertCtrl: AlertController, private af: AngularFire, @Inject(FirebaseApp)firebase: any,
    private platform: Platform) { //Add reference to native firebase SDK
     this.firebase = firebase; 
     this.af.auth.subscribe((state: FirebaseAuthState) => {
@@ -52,7 +52,12 @@ export class AuthProvider {
     this.af.auth.logout();
   }
  
-  get currentUser():string{
-    return this.authState?this.authState.auth.email:'';
+  get userName():string {
+    return this.authState?this.authState.auth.displayName:'';
   } 
+
+  get userImage():string {
+    return this.authState?this.authState.auth.photoURL:'';
+  } 
+
 }
