@@ -31,7 +31,4 @@ export class LoginPage {
     });
   } // loginWithFacebook
 
-  logout(): void {
-      this.auth.logout();
-    }
 }

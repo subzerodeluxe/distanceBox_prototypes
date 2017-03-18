@@ -7,7 +7,6 @@ import { ImagesService } from '../services/images'
 import { AngularFireModule } from 'angularfire2';
 import { AuthProvider} from '../providers/auth-provider'  
 
-
 // import pages
 import { SoundListPage } from '../pages/sound-list/sound-list';
 import { ImageListPage } from '../pages/image-list/image-list';
@@ -16,7 +15,8 @@ import { AddSoundPage } from '../pages/add-sound/add-sound';
 import { MediaListPage } from '../pages/media-list/media-list';
 import { TakePicturePage } from '../pages/take-picture/take-picture';
 import { LoginPage } from '../pages/login/login';
-
+import { ProfilePage } from '../pages/profile/profile';
+import { WordsPage } from '../pages/words/words'; 
 
 // setup Firebase credentials 
 export const firebaseConfig = {
@@ -36,7 +36,9 @@ export const firebaseConfig = {
     AddSoundPage,
     MediaListPage,
     TakePicturePage,
-    LoginPage
+    LoginPage,
+    ProfilePage,
+    WordsPage
     
   ],
   imports: [
@@ -52,7 +54,9 @@ export const firebaseConfig = {
     AddSoundPage,
     MediaListPage,
     TakePicturePage,
-    LoginPage
+    LoginPage,
+    ProfilePage,
+    WordsPage
     
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},

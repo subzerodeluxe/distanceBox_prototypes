@@ -5,42 +5,67 @@
       <ion-title>Menu</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content>
+
+  <ion-content padding>
     <ion-list>
-      <button
+      <ion-item>
+        <ion-avatar item-left>
+            <img *ngIf="auth.authState" src="{{auth.userImage}}">
+        </ion-avatar>
+        <h2 *ngIf="auth.authState">{{auth.userName}}</h2>
+      </ion-item>  
+    </ion-list>
+
+    <ion-list>
+    <button
         ion-item
         icon-left
-        (click)="onLoad(rootPage)">
+        (click)="onLoad(profilePage)">
+        <ion-icon name="person"></ion-icon>
+        Profile 
+      </button>
+         <button
+        ion-item
+        icon-left
+        (click)="onLoad(wordsPage)">
+        <ion-icon name="list-box"></ion-icon>
+        Words 
+      </button>
+      <!--<button
+        ion-item
+        icon-left
+        (click)="onLoad(tabsPage)">
         <ion-icon name="musical-notes"></ion-icon>
         Recordings
       </button>
          <button
         ion-item
         icon-left
-        (click)="onLoad(rootPage)">
+        (click)="onLoad(tabsPage)">
         <ion-icon name="images"></ion-icon>
         Images
-      </button>
-      
+      </button>--> 
+    </ion-list>
     
+    <ion-list> 
       <button
         ion-item
         icon-left
-        (click)="onLoad(signinPage)">
+        (click)="onLoad(loginPage)">
         <ion-icon name="log-in"></ion-icon>
-        Signin
+        Login
       </button>
-      <button
+      <!--<button
         ion-item
         icon-left
         (click)="onLoad(signupPage)">
         <ion-icon name="person"></ion-icon>
         Signup
-      </button>
+      </button>--> 
       <button
         ion-item
         icon-left
-        (click)="onLogout()">
+        (click)="logOut()">
         <ion-icon name="log-out"></ion-icon>
         Logout
       </button>
@@ -49,4 +74,4 @@
   </ion-content>
 </ion-menu>
 
-<ion-nav [root]="rootPage" #nav></ion-nav>
+<ion-nav [root]="tabsPage" #nav></ion-nav>

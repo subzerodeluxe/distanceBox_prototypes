@@ -4,22 +4,14 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding>
- <ion-list>
-    <ion-item>
-        <ion-avatar item-left>
-            <img *ngIf="auth.authState" src="{{auth.userImage}}">
-        </ion-avatar>
-        <h2 *ngIf="auth.authState">{{auth.userName}}</h2>
-    </ion-item>  
-</ion-list>
-
-  <ion-row>
-      <button (click)="logout()" ion-button block>Log out</button>
-  </ion-row>
-  <ion-row> 
-        <button (click)="loginWithFacebook()" ion-button block>Facebook login</button>
+ 
+    <ion-row> 
+        <button 
+            (click)="loginWithFacebook()" 
+            ion-button block>
+            Login with Facebook 
+        </button>
     </ion-row>
 
 </ion-content>
