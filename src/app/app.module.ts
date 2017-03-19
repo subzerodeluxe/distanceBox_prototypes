@@ -3,7 +3,8 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 // import services/ providers
-import { ImagesService } from '../services/images'
+import { ImagesService } from '../services/images';
+import { Timezone } from '../providers/timezone'; 
 import { AngularFireModule } from 'angularfire2';
 import { AuthProvider} from '../providers/auth-provider'  
 
@@ -17,6 +18,7 @@ import { TakePicturePage } from '../pages/take-picture/take-picture';
 import { LoginPage } from '../pages/login/login';
 import { ProfilePage } from '../pages/profile/profile';
 import { WordsPage } from '../pages/words/words'; 
+import { BlackJackTipsPage } from '../pages/black-jack-tips/black-jack-tips';
 
 // setup Firebase credentials 
 export const firebaseConfig = {
@@ -38,7 +40,8 @@ export const firebaseConfig = {
     TakePicturePage,
     LoginPage,
     ProfilePage,
-    WordsPage
+    WordsPage,
+    BlackJackTipsPage
     
   ],
   imports: [
@@ -56,10 +59,11 @@ export const firebaseConfig = {
     TakePicturePage,
     LoginPage,
     ProfilePage,
-    WordsPage
+    WordsPage,
+    BlackJackTipsPage
     
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
-  ImagesService, AuthProvider]
+  ImagesService, AuthProvider, Timezone]
 })
 export class AppModule {}

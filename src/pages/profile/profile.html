@@ -12,6 +12,38 @@
 <ion-content padding>
     <h3 *ngIf="auth.authState">Hi {{auth.userName}}!</h3>
     
+  <p>Get local weather (Yogjakarta en Tilburg) <br>
+  Get timezones <br>
+  Implement FAB --> Daily Tips by Black Jack
+  </p>
 
-    <button ion-button block>Check weather!</button>
+  <ion-fab right bottom>
+    <button ion-fab color="light" [navPush]="blackJackTips">
+      <ion-icon name="bowtie"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <div *ngIf="correctTime" class="time">{{correctTime}}
+    <ion-icon *ngIf="nightTime" icon-left name="moon"></ion-icon> 
+    <ion-icon *ngIf="!nightTime" icon-left name="sunny"></ion-icon>  
+  </div>  
 </ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-segment>
+      <ion-segment-button 
+      (click)="getTime('tilburg')"
+      value="tilburg">
+          Tilburg
+      </ion-segment-button>
+      <ion-segment-button 
+      (click)="getTime('yoga')" 
+      value="yogja">
+          Yogja
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>
+

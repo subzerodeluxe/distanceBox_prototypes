@@ -21,7 +21,7 @@
         ion-item
         icon-left
         (click)="onLoad(profilePage)">
-        <ion-icon name="person"></ion-icon>
+        <ion-icon name="contact"></ion-icon>
         Profile 
       </button>
          <button
@@ -51,6 +51,7 @@
       <button
         ion-item
         icon-left
+        *ngIf="!auth.authState" 
         (click)="onLoad(loginPage)">
         <ion-icon name="log-in"></ion-icon>
         Login

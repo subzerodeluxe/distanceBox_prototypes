@@ -15,6 +15,7 @@ export class AuthProvider {
    constructor(private alertCtrl: AlertController, private af: AngularFire, @Inject(FirebaseApp)firebase: any,
    private platform: Platform) { //Add reference to native firebase SDK
     this.firebase = firebase; 
+    
     this.af.auth.subscribe((state: FirebaseAuthState) => {
       this.authState = state;
       this.onAuth.emit(state);
@@ -24,12 +25,13 @@ export class AuthProvider {
   loginWithFacebook() {
     return Observable.create(observer => {
       if (this.platform.is('cordova')) {
-        return Facebook.login(['email', 'public_profile']).then(res => {
-          const facebookCredential = auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
-          this.firebase.auth().signInWithCredential(facebookCredential).then(()=>{
+        return Facebook.login(['email', 'public_profile'])
+          .then(res => {
+            const facebookCredential = auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
+            this.firebase.auth().signInWithCredential(facebookCredential).then(()=>{
             observer.next();
-          }).catch(error => {
-            //console.log(error);
+          })
+          .catch(error => {
             observer.error(error);
           });
         });

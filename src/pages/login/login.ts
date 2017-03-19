@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 
 // import pages and services 
@@ -12,23 +12,35 @@ import { TabsPage } from '../tabs/tabs';
 })
 export class LoginPage {
 
-  loginForm: FormGroup;
-  error: any;
+  loggedIn: boolean = false;
 
- 
   constructor(public navCtrl: NavController, 
-  private fb: FormBuilder, public auth: AuthProvider) {   
-
+   public auth: AuthProvider, public loadCtrl: LoadingController,
+   public alertCtrl: AlertController) {   
   }
  
+  loginWithFacebook() {
 
-  loginWithFacebook(): void{
+    const loadMessage = this.loadCtrl.create({
+      content: "Signing you in ..." 
+    });
+    loadMessage.present(); 
+
     this.auth.loginWithFacebook().subscribe((success) => {
-      console.log(success);
+      loadMessage.dismiss(); 
       this.navCtrl.push(TabsPage);  
     }, err => {
-      console.log(err);
+      loadMessage.dismiss();
+      this.showAlert("Could not sign you in. Try again!"); 
     });
   } // loginWithFacebook
 
+  showAlert(message: string) {
+    const alert = this.alertCtrl.create({
+      title: 'Oh my ..',
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present(); 
+  }
 }
