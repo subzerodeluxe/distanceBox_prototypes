@@ -20,7 +20,9 @@ export class ProfilePage {
   formattedDate: any;
   correctDate: any; 
   formattedTime: any; 
+  time: any; 
   nightTime: boolean = false; 
+  timestamp: any; 
 
   constructor(public navCtrl: NavController, 
   private auth: AuthProvider, private timeZone: Timezone, public navParams: NavParams) {}
@@ -33,21 +35,50 @@ export class ProfilePage {
       var cityCode = "Asia/Jakarta"; 
     }
 
-    var correctTime = this.timeZone.getTimeByCity(cityCode)
+    var outcome = this.timeZone.getTimeByCity(cityCode)
     .subscribe(resp => {
-      console.log(resp); 
-      //this.correctTime = this.convertTime(resp.timestamp); 
-      this.correctTime = this.checkNight(resp.formatted);
-      this.correctDate = resp.formatted.substr(0, 10); 
-
+      console.log(resp);
+      
+      //this.correctTime = this.checkNight(resp.formatted);
+      //this.correctDate = resp.formatted.substr(0, 10); 
+      this.correctDate = new Date(resp.timestamp*1000).toDateString(); 
+      this.time = this.startTime(resp.timestamp); 
+      console.log("Timestamp: " + resp.timestamp); 
     })
     
+  }
+
+  startTime(timestamp) {
+    // Create a new JavaScript Date object based on the timestamp
+    // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+    var date = new Date(timestamp*1000);
+    console.log("Date object: " + date + " || " + new Date())
+    // Hours part from the timestamp
+    var hours = date.getHours();
+    // Minutes part from the timestamp
+    var minutes = date.getMinutes();
+    // Seconds part from the timestamp
+    var seconds = date.getSeconds();
+    
+    minutes = this.checkTime(minutes);
+    seconds = this.checkTime(seconds);
+    console.log("Sec: " + seconds + " Min: " + minutes); 
+    // set correct time via property binding 
+    this.correctTime = hours + ":" + minutes + ":" + seconds;
+    /*var t = setTimeout(() => {
+      this.startTime(timestamp), 500
+    }) */
+  }
+
+  checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    
+    return i;
   }
 
   checkNight(time) {
     var correctTime = time.substr(11, 18);
     var hours = Number(correctTime.substr(0, 2)); 
-    console.log("abu " + hours); 
     
     if ((hours >= 0 && hours <= 5) || (hours >= 18 && hours <= 23)) {
         this.nightTime = true; 

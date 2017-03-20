@@ -23,11 +23,11 @@
     </button>
   </ion-fab>
 
-  <div *ngIf="correctTime" class="time">{{correctTime}}
+  <div *ngIf="correctTime" class="time"><h3>{{correctTime}}</h3>
     <ion-icon *ngIf="nightTime" icon-left name="moon"></ion-icon> 
     <ion-icon *ngIf="!nightTime" icon-left name="sunny"></ion-icon>  
   </div>  
-  <div class="date">{{correctDate}}</div>
+  <div class="date"><p>{{correctDate}}</p></div>
 </ion-content>
 
 
