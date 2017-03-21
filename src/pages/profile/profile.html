@@ -23,7 +23,7 @@
     </button>
   </ion-fab>
 
-  <div *ngIf="correctTime" class="time"><h3>{{correctTime}}</h3>
+  <div class="time"><h3>{{time}}</h3>
     <ion-icon *ngIf="nightTime" icon-left name="moon"></ion-icon> 
     <ion-icon *ngIf="!nightTime" icon-left name="sunny"></ion-icon>  
   </div>  
@@ -35,12 +35,12 @@
   <ion-toolbar>
     <ion-segment>
       <ion-segment-button 
-      (click)="getTime('tilburg')"
+      (click)="startTime('Europe/Amsterdam')"
       value="tilburg">
           Tilburg
       </ion-segment-button>
       <ion-segment-button 
-      (click)="getTime('yoga')" 
+      (click)="startTime('Asia/Jakarta')" 
       value="yogja">
           Yogja
       </ion-segment-button>

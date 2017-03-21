@@ -23,57 +23,125 @@ export class ProfilePage {
   time: any; 
   nightTime: boolean = false; 
   timestamp: any; 
+  gotTime: boolean = false;
+  returnObject: any; 
+  globalTime :any; 
+  hourDelta: number; 
 
   constructor(public navCtrl: NavController, 
   private auth: AuthProvider, private timeZone: Timezone, public navParams: NavParams) {}
 
- 
-  getTime(city) {
-    if (city == "tilburg") {
-      var cityCode = "Europe/Amsterdam";
+  
+
+  getTime (cityCode) {
+    console.log("CityCode: " + cityCode); 
+    if (cityCode == "tilburg") {
+      var city = "Europe/Amsterdam";
     } else {
-      var cityCode = "Asia/Jakarta"; 
+      var city = "Asia/Jakarta"; 
     }
 
-    var outcome = this.timeZone.getTimeByCity(cityCode)
+    
+    
+    return this.timeZone.getTimeByCity(city)
     .subscribe(resp => {
+   
+     
       console.log(resp);
+
+      var foreignTime = new Date(resp.timestamp*1000);
+    
+      var foreignHours = foreignTime.getUTCHours();
       
-      //this.correctTime = this.checkNight(resp.formatted);
-      //this.correctDate = resp.formatted.substr(0, 10); 
-      this.correctDate = new Date(resp.timestamp*1000).toDateString(); 
-      this.time = this.startTime(resp.timestamp); 
-      console.log("Timestamp: " + resp.timestamp); 
+      console.log(foreignHours);
+      //var localHoursOffset = foreignTime.getTimezoneOffset()/60;
+
+      var localHours = new Date().getUTCHours(); 
+      console.log(localHours);
+      var finalTimeStamp = foreignTime.setHours(foreignHours);
+      
+      var finalTime = new Date(finalTimeStamp);
+      
+      // set correctDate 
+      this.correctDate = this.formatDate(finalTime); 
+
+     
+    
+      this.globalTime = finalTime; 
+     
+     
+      
     })
     
   }
 
-  startTime(timestamp) {
+  startTime(city) {
     // Create a new JavaScript Date object based on the timestamp
     // multiplied by 1000 so that the argument is in milliseconds, not seconds.
-    var date = new Date(timestamp*1000);
-    console.log("Date object: " + date + " || " + new Date())
-    // Hours part from the timestamp
-    var hours = date.getHours();
-    // Minutes part from the timestamp
-    var minutes = date.getMinutes();
-    // Seconds part from the timestamp
-    var seconds = date.getSeconds();
+    if (this.gotTime == false) {
+     
+      this.gotTime = true; 
+      this.getTime(city); 
+    } 
+      
+    var t = setTimeout(() => {
+      //console.log(this.globalTime);
+      // Hours part from the timestamp
+      
+      var hours = this.globalTime.getHours();
+      // Minutes part from the timestamp
+      var localMinutes = new Date().getMinutes(); 
+      this.globalTime.setMinutes(localMinutes);
+      var minutes = this.globalTime.getMinutes();
+      // Seconds part from the timestamp
+      var localSeconds = new Date().getSeconds();
+      this.globalTime.setSeconds(localSeconds);
+      var seconds = this.globalTime.getSeconds();
+      
+      //console.log(seconds);
+      minutes = this.checkTime(minutes);
+      seconds = this.checkTime(seconds);
     
-    minutes = this.checkTime(minutes);
-    seconds = this.checkTime(seconds);
-    console.log("Sec: " + seconds + " Min: " + minutes); 
-    // set correct time via property binding 
-    this.correctTime = hours + ":" + minutes + ":" + seconds;
-    /*var t = setTimeout(() => {
-      this.startTime(timestamp), 500
-    }) */
+      // set correct time via property binding 
+      this.correctTime = hours + ":" + minutes + ":" + seconds;
+      
+      
+      
+      this.time = this.correctTime;
+      //console.log(this.globalTime);
+       //this.time = this.globalTime;
+      this.startTime(city);
+      }, 1000) 
+    
   }
+  
 
   checkTime(i) {
     if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-    
+    //console.log(i);
     return i;
+  }
+
+
+  formatDate(date) {
+    var monthNames = [
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+    ];
+
+    var dayNames = [
+      "Sunday", "Monday", "Tuesday", "Wednesday",
+      "Thursday", "Friday", "Saturday", 
+    ];
+
+    var day = date.getDate();
+    var dayIndex = date.getDay(); 
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+
+    return dayNames[dayIndex] + ' ' + day + ' ' + monthNames[monthIndex] + ' ' + year;
   }
 
   checkNight(time) {
