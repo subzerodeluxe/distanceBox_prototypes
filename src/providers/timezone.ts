@@ -23,7 +23,6 @@ export class Timezone {
   
     var response = this.http.get(url)
     .map(res => res.json());
-      console.log(response);
     return response;
   
   }

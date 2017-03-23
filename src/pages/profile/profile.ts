@@ -24,101 +24,75 @@ export class ProfilePage {
   nightTime: boolean = false; 
   timestamp: any; 
   gotTime: boolean = false;
-  returnObject: any; 
   globalTime :any; 
-  hourDelta: number; 
-
-  constructor(public navCtrl: NavController, 
-  private auth: AuthProvider, private timeZone: Timezone, public navParams: NavParams) {}
-
   
+  constructor(public navCtrl: NavController, 
+  private auth: AuthProvider, private timeZone: Timezone, 
+  public navParams: NavParams) {}
 
   getTime (cityCode) {
-    console.log("CityCode: " + cityCode); 
-    if (cityCode == "tilburg") {
-      var city = "Europe/Amsterdam";
-    } else {
-      var city = "Asia/Jakarta"; 
-    }
-
-    
-    
-    return this.timeZone.getTimeByCity(city)
+   
+    return this.timeZone.getTimeByCity(cityCode)
     .subscribe(resp => {
    
-     
-      console.log(resp);
-
       var foreignTime = new Date(resp.timestamp*1000);
-    
       var foreignHours = foreignTime.getUTCHours();
-      
-      console.log(foreignHours);
-      //var localHoursOffset = foreignTime.getTimezoneOffset()/60;
-
       var localHours = new Date().getUTCHours(); 
-      console.log(localHours);
       var finalTimeStamp = foreignTime.setHours(foreignHours);
-      
       var finalTime = new Date(finalTimeStamp);
-      
+
       // set correctDate 
       this.correctDate = this.formatDate(finalTime); 
-
-     
-    
+      // check nightTime
+      console.log(resp.formatted); 
+      this.checkNight(resp.formatted); 
       this.globalTime = finalTime; 
-     
-     
-      
     })
     
   }
 
-  startTime(city) {
-    // Create a new JavaScript Date object based on the timestamp
-    // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+  startTime(cityCode) {
+  
     if (this.gotTime == false) {
-     
+      this.getTime(cityCode); 
       this.gotTime = true; 
-      this.getTime(city); 
     } 
-      
+  
     var t = setTimeout(() => {
-      //console.log(this.globalTime);
-      // Hours part from the timestamp
-      
+     
       var hours = this.globalTime.getHours();
-      // Minutes part from the timestamp
       var localMinutes = new Date().getMinutes(); 
       this.globalTime.setMinutes(localMinutes);
       var minutes = this.globalTime.getMinutes();
-      // Seconds part from the timestamp
       var localSeconds = new Date().getSeconds();
       this.globalTime.setSeconds(localSeconds);
       var seconds = this.globalTime.getSeconds();
       
-      //console.log(seconds);
       minutes = this.checkTime(minutes);
       seconds = this.checkTime(seconds);
     
       // set correct time via property binding 
       this.correctTime = hours + ":" + minutes + ":" + seconds;
-      
-      
-      
       this.time = this.correctTime;
-      //console.log(this.globalTime);
-       //this.time = this.globalTime;
-      this.startTime(city);
+      this.startTime(cityCode);
       }, 1000) 
-    
+  }
+
+  checkCity(city) {
+    console.log("Incoming city " + city);
+      if (city == "tilburg") {
+        var cityCode = "Europe/Amsterdam";
+        console.log(cityCode);
+        this.startTime(cityCode);
+      } else {
+        var cityCode = "Asia/Jakarta"; 
+        console.log(cityCode); 
+        this.startTime(cityCode); 
+      }
   }
   
-
   checkTime(i) {
     if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-    //console.log(i);
     return i;
   }
 
@@ -153,29 +127,6 @@ export class ProfilePage {
       } else {
         this.nightTime = false; 
       } 
-      return correctTime; 
   }
-  
-
-  /*convertTime(timestamp) {
-    // Create a new JavaScript Date object based on the timestamp
-    // multiplied by 1000 so that the argument is in milliseconds, not seconds.
-    var date = new Date(timestamp*1000);
-    // Hours part from the timestamp
-    var hours = date.getHours();
-    // Minutes part from the timestamp
-    var minutes = "0" + date.getMinutes();
-    // Seconds part from the timestamp
-    var seconds = "0" + date.getSeconds();
-
-     if ((hours >= 0 && hours <= 5) || (hours >= 18 && hours <= 23)) {
-        this.nightTime = true; 
-      } else {
-        this.nightTime = false; 
-      } 
-
-    // Will display time in 10:30:23 format
-    return this.formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-  }*/ 
 
 }
