@@ -1,0 +1,103 @@
+<ion-header>
+   <ion-toolbar>
+      <ion-title>
+         {{ title }}
+      </ion-title>
+      <ion-buttons start>
+         <button ion-button color="primary" (click)="closeModal()">
+            <span showWhen="ios">Cancel</span>
+            <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+         </button>
+      </ion-buttons>
+   </ion-toolbar>
+</ion-header>
+<ion-content>
+   <form [formGroup]="form" (ngSubmit)="saveStory(form.value)">
+
+      <ion-item-divider color="light">
+         <div *ngIf="!isEditable">
+            Add a new story
+         </div>
+
+         <div *ngIf="isEditable">
+            Update this story
+         </div>
+      </ion-item-divider>
+
+
+      <ion-item>
+         <ion-label stacked>Story name:</ion-label>
+         <ion-input
+            type="text"
+            formControlName="name"
+            [(ngModel)]="storyName"></ion-input>
+      </ion-item>
+
+
+
+      <ion-item>
+         <ion-label stacked>Mood:</ion-label>
+         <ion-input
+            type="text"
+            formControlName="mood"
+            [(ngModel)]="storyMood"></ion-input>
+      </ion-item>
+
+
+
+      <ion-item>
+         <ion-label stacked>Tags:</ion-label>
+         <ion-select
+            formControlName="tags"
+            multiple="true"
+            [(ngModel)]="storyTags">
+             <ion-option value="Yumyum">Yum yum</ion-option>
+             <ion-option value="Olib">Olib</ion-option>
+             <ion-option value="Fun">Fun</ion-option>
+             <ion-option value="Poppie">Poppie</ion-option>
+             <ion-option value="Sun">Sun</ion-option>
+         </ion-select>
+      </ion-item>
+
+      <ion-item>
+         <ion-label stacked>Summary:</ion-label>
+         <ion-textarea
+			rows="6"
+            formControlName="summary"
+            [(ngModel)]="storySummary"></ion-textarea>
+      </ion-item>
+
+
+
+      <ion-item>
+         <ion-label stacked>Image</ion-label>
+         <ion-input
+            type="text"
+            formControlName="image"
+            [(ngModel)]="storyImage"></ion-input>
+      </ion-item>
+
+
+      <ion-item>
+         <input
+            type="hidden"
+            name="storyId" >
+
+         <button
+           ion-button
+           block
+           color="primary"
+           text-center
+           [disabled]="!form.valid">
+            <div *ngIf="!isEditable">
+               Add a new story 
+            </div>
+
+            <div *ngIf="isEditable">
+               Update this story
+            </div>
+         </button>
+      </ion-item>
+
+   </form>
+</ion-content>

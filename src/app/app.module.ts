@@ -19,6 +19,7 @@ import { LoginPage } from '../pages/login/login';
 import { ProfilePage } from '../pages/profile/profile';
 import { WordsPage } from '../pages/words/words'; 
 import { BlackJackTipsPage } from '../pages/black-jack-tips/black-jack-tips';
+import { StoryModalPage } from '../pages/story-modal/story-modal';
 
 // setup Firebase credentials 
 export const firebaseConfig = {
@@ -41,7 +42,8 @@ export const firebaseConfig = {
     LoginPage,
     ProfilePage,
     WordsPage,
-    BlackJackTipsPage
+    BlackJackTipsPage,
+    StoryModalPage
     
   ],
   imports: [
@@ -60,7 +62,8 @@ export const firebaseConfig = {
     LoginPage,
     ProfilePage,
     WordsPage,
-    BlackJackTipsPage
+    BlackJackTipsPage,
+    StoryModalPage
     
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},

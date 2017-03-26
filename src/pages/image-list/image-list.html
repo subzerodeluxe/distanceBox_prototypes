@@ -1,33 +1,58 @@
-
 <ion-header>
-
   <ion-navbar>
-    <ion-buttons start>
+      <ion-title>
+         Stories
+      </ion-title>
+    <ion-buttons end>
       <button ion-button icon-only menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
+        <button
+            ion-button
+            icon-only
+            (click)="addRecord()">
+            <ion-icon name="add"></ion-icon>
+         </button>
     </ion-buttons>
-    <ion-title>image-list</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding>
-   <button ion-button block outline icon-left
-    (click)="addNewPicture()">
-    <ion-icon name="add"></ion-icon>
- Add New Picture
-  </button>
+   <ion-list>
+      <ion-card
+         class="story"
+         text-wrap
+         *ngFor="let story of stories | async">
+         <ion-item>
+            <h2>{{ story.title }}</h2>
+            <p>{{ story.summary }}</p>
 
-  <ion-card *ngFor="let image of images" (click)="openImage(image)">
-    <img [src]="image.imageUrl">
-    <ion-card-content>
-      <ion-card-title>
-        {{ image.title }} {{ image.date }} 
-      </ion-card-title>
-      <p>{{ image.description }}</p>
-    </ion-card-content>
-  </ion-card>
+
+            <section class="multiples">
+               <h3>Tags</h3>
+	       <ion-chip
+                *ngFor="let tag of story.tags"
+                padding-left
+                padding-right
+                margin-right>{{ tag.name }}</ion-chip>
+            </section>
+         </ion-item>
+
+
+         <div class="manage-record" padding>
+            <button
+               ion-button
+               text-center
+               color="primary"
+               (click)="editStory(story)">Edit</button>
+
+            <button
+               ion-button
+               text-center
+               color="danger"
+               (click)="deleteStory(story)">Delete</button>
+         </div>
+      </ion-card>
+   </ion-list>
 
 </ion-content>
