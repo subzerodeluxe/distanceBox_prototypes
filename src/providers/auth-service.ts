@@ -7,7 +7,7 @@ import { Facebook } from 'ionic-native';
 import { auth } from 'firebase'; //needed for the FacebookAuthProvider
  
 @Injectable()
-export class AuthProvider {
+export class AuthService {
   private authState: FirebaseAuthState;
   public onAuth: EventEmitter<FirebaseAuthState> = new EventEmitter();
   public firebase : any;

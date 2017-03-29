@@ -7,12 +7,6 @@
       <button ion-button icon-only menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
-        <button
-            ion-button
-            icon-only
-            (click)="addRecord()">
-            <ion-icon name="add"></ion-icon>
-         </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -55,4 +49,9 @@
       </ion-card>
    </ion-list>
 
+  <ion-fab right bottom>
+    <button ion-fab (click)="addRecord()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>

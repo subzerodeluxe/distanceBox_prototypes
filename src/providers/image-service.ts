@@ -7,7 +7,7 @@ import { Image } from '../models/image';
 
 
 @Injectable()
-export class ImagesService {
+export class ImageService {
 
   constructor(public http: Http) {
     console.log('Hello Images Provider');

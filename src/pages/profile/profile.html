@@ -10,41 +10,27 @@
 </ion-header>
 
 <ion-content padding>
-    <h3 *ngIf="auth.authState">Hi {{auth.userName}}!</h3>
+  <!--<h3 *ngIf="auth.authState">Hi {{auth.userName}}!</h3>-->
     
-  <p>Get local weather (Yogjakarta en Tilburg) <br>
-  Get timezones <br>
-  Implement FAB --> Daily Tips by Black Jack
-  </p>
+  <div class="time">{{ correctTime }}</div>
+  <div class="date">{{ correctDate }}</div>
+  <div class="city">{{ selectedCity }}</div>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>Choose city</ion-label>
+      <ion-select 
+        [(ngModel)]="selectedCity" 
+        (ionChange)="cityChange($event)">
+        <ion-option value="Asia/Jakarta">Yogja</ion-option>
+        <ion-option value="Europe/Amsterdam">Tilburg</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 
   <ion-fab right bottom>
     <button ion-fab color="light" [navPush]="blackJackTips">
       <ion-icon name="bowtie"></ion-icon>
     </button>
   </ion-fab>
-
-  <div class="time"><h3>{{time}}</h3>
-    <ion-icon *ngIf="nightTime" icon-left name="moon"></ion-icon> 
-    <ion-icon *ngIf="!nightTime" icon-left name="sunny"></ion-icon>  
-  </div>  
-  <div class="date"><p>{{correctDate}}</p></div>
 </ion-content>
-
-
-<ion-footer>
-  <ion-toolbar>
-    <ion-segment>
-      <ion-segment-button 
-      (click)="checkCity('tilburg')"
-      value="tilburg">
-          Tilburg
-      </ion-segment-button>
-      <ion-segment-button 
-      (click)="checkCity('yogja')" 
-      value="yogja">
-          Yogja
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
-</ion-footer>
-

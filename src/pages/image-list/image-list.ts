@@ -4,10 +4,10 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import 'rxjs/add/operator/map';
 import * as firebase from 'firebase';
 
-// import pages
-import { StoryModalPage } from '../story-modal/story-modal';
-import { ImagesService } from '../../services/images';
-import { Image } from '../../models/image'; 
+// import pages and services and models 
+import { Image } from '../../models/image';
+import { ImageService } from "../../providers/image-service";
+import { StoryModalPage } from "../../components/story-modal/story-modal";
 
 
 @Component({
@@ -20,7 +20,7 @@ export class ImageListPage {
   imageUrl = '';
   stories: FirebaseListObservable<any[]>;
 
-  constructor(public navCtrl: NavController, private imagesService: ImagesService,
+  constructor(public navCtrl: NavController, private imageService: ImageService,
   private angFire: AngularFire, private modalCtrl: ModalController, private platform  : Platform) {}
 
   ionViewDidLoad()

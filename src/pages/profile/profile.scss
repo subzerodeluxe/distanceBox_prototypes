@@ -1,10 +1,21 @@
 page-profile {
-    .time {
+ .time {
         text-align: center; 
-        margin-top: 300px; 
+        padding-top: 10px;
+        padding-bottom: 5px;
+        text-transform: uppercase;
+        font-weight: bold;
     }
 
     .date {
-        text-align: center; 
+        text-align: center;
+        padding-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .city {
+        text-align: center;
+        padding-bottom: 25px;
+        font-weight: bold;
     }
 }

@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 
 // import pages and services 
-import { AuthProvider } from '../../providers/auth-provider';
 import { TabsPage } from '../tabs/tabs';
+import { AuthService } from "../../providers/auth-service";
 
 @Component({
   selector: 'page-login',
@@ -15,7 +14,7 @@ export class LoginPage {
   loggedIn: boolean = false;
 
   constructor(public navCtrl: NavController, 
-   public auth: AuthProvider, public loadCtrl: LoadingController,
+   public auth: AuthService, public loadCtrl: LoadingController,
    public alertCtrl: AlertController) {   
   }
  

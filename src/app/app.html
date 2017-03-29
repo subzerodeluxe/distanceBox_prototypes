@@ -24,12 +24,19 @@
         <ion-icon name="contact"></ion-icon>
         Profile 
       </button>
-         <button
+      <button
         ion-item
         icon-left
         (click)="onLoad(wordsPage)">
         <ion-icon name="list-box"></ion-icon>
         Words 
+      </button>
+       <button
+        ion-item
+        icon-left
+        (click)="onLoad(tabsPage)">
+        <ion-icon name="flash"></ion-icon>
+        Activity 
       </button>
       <!--<button
         ion-item
@@ -71,8 +78,24 @@
         Logout
       </button>
     </ion-list>
-    
   </ion-content>
+
+<ion-footer>
+  <div class="time">{{ correctTime }}</div>
+  <div class="date">{{ correctDate }}</div>
+  <ion-list>
+    <ion-item>
+      <ion-label>Choose city</ion-label>
+      <ion-select 
+        (ionChange)="cityChange($event)">
+        <ion-option value="Asia/Jakarta">Yogja</ion-option>
+        <ion-option value="Europe/Amsterdam">Tilburg</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-footer>
+
+    
 </ion-menu>
 
 <ion-nav [root]="tabsPage" #nav></ion-nav>

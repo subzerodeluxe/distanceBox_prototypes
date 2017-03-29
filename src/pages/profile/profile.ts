@@ -1,55 +1,87 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 
 // import pages and services 
-import { AuthProvider } from '../../providers/auth-provider';
 import { BlackJackTipsPage } from '../black-jack-tips/black-jack-tips';
-import { Timezone } from '../../providers/timezone'; 
+import { TimezoneService } from "../../providers/timezone-service";
+import { AuthService } from "../../providers/auth-service";
+import * as moment from 'moment';
+import { WeatherService } from "../../providers/weather-service";
 
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html',
-  providers: [AuthProvider, Timezone]
+  providers: [AuthService, TimezoneService]
 })
 
 export class ProfilePage {
   
-  // properties
-  blackJackTips = BlackJackTipsPage;
-  correctTime: any;
-  formattedDate: any;
   correctDate: any; 
-  formattedTime: any; 
-  time: any; 
-  nightTime: boolean = false; 
-  timestamp: any; 
-  gotTime: boolean = false;
-  globalTime :any; 
-  
-  constructor(public navCtrl: NavController, 
-  private auth: AuthProvider, private timeZone: Timezone, 
-  public navParams: NavParams) {}
+  correctTime: any;
+  gotTime: boolean = false; 
+  globalTime: any; 
+  finalTimeStamp: any; 
+  receivedCode: any; 
+  checkTime: any; 
+  selectedCity: any; 
 
-  getTime (cityCode) {
-   
-    return this.timeZone.getTimeByCity(cityCode)
-    .subscribe(resp => {
-   
-      var foreignTime = new Date(resp.timestamp*1000);
-      var foreignHours = foreignTime.getUTCHours();
-      var localHours = new Date().getUTCHours(); 
-      var finalTimeStamp = foreignTime.setHours(foreignHours);
-      var finalTime = new Date(finalTimeStamp);
-
-      // set correctDate 
-      this.correctDate = this.formatDate(finalTime); 
-      // check nightTime
-      console.log(resp.formatted); 
-      this.checkNight(resp.formatted); 
-      this.globalTime = finalTime; 
-    })
+  constructor(public navCtrl: NavController, public alertCtrl: 
+  AlertController, public time: TimezoneService) {
     
   }
+
+  ngOnInit() {
+    //this.correctTime = "Please select a city"!; 
+
+    var cityCode = 'Asia/Jakarta'; 
+    this.startTime(cityCode); 
+
+    this.selectedCity = "Yogjakarta"; 
+  
+  } // ngOnInit() 
+
+ 
+  cityChange(code) {
+    this.receivedCode = code; 
+    console.log(this.receivedCode); 
+
+    if(this.receivedCode == 'Europe/Amsterdam') {
+      clearTimeout(this.checkTime);
+      this.gotTime = false;
+      this.startTime(this.receivedCode); 
+      
+    } else {
+      clearTimeout(this.checkTime); 
+      this.gotTime = false; 
+      this.startTime(this.receivedCode); 
+    }
+  }
+
+  
+  getTime(code) {
+    this.time.getTimeByCity(code).subscribe(
+      data => {
+          console.log('Get Time response ' + JSON.stringify(data));
+          var foreignTime = new Date(data.timestamp*1000);
+          var foreignHours = foreignTime.getUTCHours();
+          this.finalTimeStamp = foreignTime.setHours(foreignHours);
+          var finalTime = new Date(this.finalTimeStamp);
+          
+          console.log("finalTime: " + finalTime); 
+
+          // set correctDate 
+          this.correctDate = this.formatDate(finalTime); 
+      
+          // SET GLOBALTIME 
+          this.globalTime = finalTime; 
+        },
+        err => {
+          console.log(err);
+        },
+        () => console.log('Completed!')
+    );
+  } // getTime() 
+
 
   startTime(cityCode) {
   
@@ -58,8 +90,8 @@ export class ProfilePage {
       this.gotTime = true; 
     } 
   
-    var t = setTimeout(() => {
-     
+    this.checkTime = setTimeout(() => {
+
       var hours = this.globalTime.getHours();
       var localMinutes = new Date().getMinutes(); 
       this.globalTime.setMinutes(localMinutes);
@@ -68,32 +100,12 @@ export class ProfilePage {
       this.globalTime.setSeconds(localSeconds);
       var seconds = this.globalTime.getSeconds();
       
-      minutes = this.checkTime(minutes);
-      seconds = this.checkTime(seconds);
-    
-      // set correct time via property binding 
-      this.correctTime = hours + ":" + minutes + ":" + seconds;
-      this.time = this.correctTime;
-      this.startTime(cityCode);
-      }, 1000) 
-  }
+      this.correctTime = moment(this.globalTime).format('hh:mm:ss a');
+      var consoleTime = moment(this.globalTime).format('hh:mm:ss a'); 
+      console.log(consoleTime);
 
-  checkCity(city) {
-    console.log("Incoming city " + city);
-      if (city == "tilburg") {
-        var cityCode = "Europe/Amsterdam";
-        console.log(cityCode);
-        this.startTime(cityCode);
-      } else {
-        var cityCode = "Asia/Jakarta"; 
-        console.log(cityCode); 
-        this.startTime(cityCode); 
-      }
-  }
-  
-  checkTime(i) {
-    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-    return i;
+      this.startTime(cityCode);
+    }, 1000) 
   }
 
 
@@ -116,17 +128,15 @@ export class ProfilePage {
     var year = date.getFullYear();
 
     return dayNames[dayIndex] + ' ' + day + ' ' + monthNames[monthIndex] + ' ' + year;
-  }
+  } // formatDate() 
 
-  checkNight(time) {
-    var correctTime = time.substr(11, 18);
-    var hours = Number(correctTime.substr(0, 2)); 
-    
-    if ((hours >= 0 && hours <= 5) || (hours >= 18 && hours <= 23)) {
-        this.nightTime = true; 
-      } else {
-        this.nightTime = false; 
-      } 
-  }
+   showAlert() {
+    let alert = this.alertCtrl.create({
+        title: 'Bad connection?',
+        message: 'Problem getting correct time. Please try again',
+        buttons: ['OK']
+        });
+      alert.present();
+  } // showAlert
 
 }
