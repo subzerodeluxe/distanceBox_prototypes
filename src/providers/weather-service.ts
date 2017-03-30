@@ -15,4 +15,23 @@ export class WeatherService {
     console.log('Hello WeatherService Provider');
   }
 
+   getWeatherByCity(city) {
+    console.log("Incoming code " + city); 
+    var baseURL = 'http://api.openweathermap.org/data/2.5/weather?';
+    var cityID = encodeURI(city); 
+    var apiKey = '&appid=945ef326dc38e1fd4ebcfbb9ccbac6d2'; 
+    var units = '&units=metric'; 
+    
+    var url = baseURL + cityID + units + apiKey; 
+    console.log("The final URL " + url);
+    // get json schema 
+    var response = this.http.get(url)
+      .map(res => res.json())
+     //.map((data) => data.main.temp)
+      
+    return response; 
+    
+  }
+
+
 }

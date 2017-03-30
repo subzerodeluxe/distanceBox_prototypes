@@ -16,6 +16,7 @@ import { WeatherService } from "../../providers/weather-service";
 
 export class ProfilePage {
   
+  blackJackTips = BlackJackTipsPage; 
   correctDate: any; 
   correctTime: any;
   gotTime: boolean = false; 
@@ -24,12 +25,16 @@ export class ProfilePage {
   receivedCode: any; 
   checkTime: any; 
   selectedCity: any; 
+  showTemp: any; 
+  iconList: any; 
+  correctIcon: any; 
+  weatherTable: {}
 
   constructor(public navCtrl: NavController, public alertCtrl: 
-  AlertController, public time: TimezoneService) {
+  AlertController, public weather: WeatherService, public time: TimezoneService) {
     
   }
-
+  
   ngOnInit() {
     //this.correctTime = "Please select a city"!; 
 
@@ -37,8 +42,59 @@ export class ProfilePage {
     this.startTime(cityCode); 
 
     this.selectedCity = "Yogjakarta"; 
+
+    this.weatherTable = 
+    {
+      "800-800": "sunny",
+      "300-550": "rainy",
+      "801-810": "cloudy",
+      "200-250": "thunderstorm"
+    }
+
   
   } // ngOnInit() 
+
+  getWeather(receivedCode) {
+    console.log("RECEVEID CODE = " + receivedCode);
+    if(receivedCode === "Asia/Jakarta") {
+      var cityID = 'id=1621177'; 
+    } else {
+      cityID = 'id=2746301';
+    }
+
+    this.weather.getWeatherByCity(cityID).subscribe(data => {   
+      // transform temp to string 
+      var responseTemp = data.main.temp.toString(); 
+      console.log("C'est une object? " + JSON.stringify(data)); 
+      this.showTemp = responseTemp.substr(0,2);
+
+      // get weather.id 
+      var weatherID = data.weather[0].id; 
+      
+      console.log(weatherID);
+      
+      var pL = /(\d+)-\d+/;
+      var pR = /\d+-(\d+)/;
+      for (let key in this.weatherTable) {
+         var value = this.weatherTable[key];
+         
+         var startGetal = pL.exec(key)[1];
+         var eindGetal = pR.exec(key)[1];
+         
+         console.log("Startgetal: " + startGetal);
+        console.log("Eindgetal: " + eindGetal);
+
+         if(weatherID >= Number.parseInt(startGetal) && weatherID <= Number.parseInt(eindGetal) || weatherID == Number.parseInt(startGetal)) 
+         {
+           this.correctIcon = value; 
+           console.log("code is: " + value);
+         }
+         else { 
+           console.log("blablalbasllbab");
+         }
+      }
+    })
+  }
 
  
   cityChange(code) {
@@ -49,11 +105,15 @@ export class ProfilePage {
       clearTimeout(this.checkTime);
       this.gotTime = false;
       this.startTime(this.receivedCode); 
+
+      this.getWeather(this.receivedCode); 
       
     } else {
       clearTimeout(this.checkTime); 
       this.gotTime = false; 
       this.startTime(this.receivedCode); 
+
+      this.getWeather(this.receivedCode); 
     }
   }
 
@@ -76,7 +136,7 @@ export class ProfilePage {
           this.globalTime = finalTime; 
         },
         err => {
-          console.log(err);
+          this.showAlert(); 
         },
         () => console.log('Completed!')
     );
