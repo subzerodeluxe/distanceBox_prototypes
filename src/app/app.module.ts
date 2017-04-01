@@ -9,7 +9,6 @@ import { AuthService } from "../providers/auth-service";
 import { TimezoneService } from "../providers/timezone-service";
 import { WeatherService } from "../providers/weather-service";
 
-
 // import pages
 import { SoundListPage } from '../pages/sound-list/sound-list';
 import { ImageListPage } from '../pages/image-list/image-list';
