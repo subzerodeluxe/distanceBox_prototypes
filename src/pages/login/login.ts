@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 
 // import pages and services 
-import { TabsPage } from '../tabs/tabs';
+//import { TabsPage } from '../tabs/tabs';
 import { AuthService } from "../../providers/auth-service";
+import { ProfilePage } from "../profile/profile";
 
 @Component({
   selector: 'page-login',
@@ -27,7 +28,7 @@ export class LoginPage {
 
     this.auth.loginWithFacebook().subscribe((success) => {
       loadMessage.dismiss(); 
-      this.navCtrl.push(TabsPage);  
+      this.navCtrl.setRoot(ProfilePage);  
     }, err => {
       loadMessage.dismiss();
       this.showAlert("Could not sign you in. Try again!"); 

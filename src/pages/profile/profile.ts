@@ -16,19 +16,36 @@ import { WeatherService } from "../../providers/weather-service";
 
 export class ProfilePage {
   
+  // page properties 
   blackJackTips = BlackJackTipsPage; 
-  correctDate: any; 
+  
+  // weather and time properties 
+  weatherTable: {}
   correctTime: any;
-  gotTime: boolean = false; 
-  globalTime: any; 
+  showTemp: any; 
+  correctIcon: any; 
+
+    // Tilburg properties 
+    correctTilburgDate: any; 
+    gotTilburgTime: boolean = false;
+    tilburgTime: any; 
+    // Yogja properties 
+    correctYogjaDate: any; 
+    gotYogjaTime: boolean = false; 
+    yogjaTime: any; 
+  
   finalTimeStamp: any; 
   receivedCode: any; 
   checkTime: any; 
   selectedCity: any; 
-  showTemp: any; 
-  iconList: any; 
-  correctIcon: any; 
-  weatherTable: {}
+
+  // Spinner properties 
+  searching: any = false; 
+  fetchedTime: boolean = false; 
+  fetchedTilburgDate: boolean = false; 
+  fetchedYogjaDate: boolean = false; 
+  fetchingData: boolean = false; 
+
 
   constructor(public navCtrl: NavController, public alertCtrl: 
   AlertController, public weather: WeatherService, public time: TimezoneService) {
@@ -36,22 +53,17 @@ export class ProfilePage {
   }
   
   ngOnInit() {
-    //this.correctTime = "Please select a city"!; 
 
-    var cityCode = 'Asia/Jakarta'; 
-    this.startTime(cityCode); 
-
-    this.selectedCity = "Yogjakarta"; 
-
-    this.weatherTable = 
-    {
-      "800-800": "sunny",
-      "300-550": "rainy",
-      "801-810": "cloudy",
-      "200-250": "thunderstorm"
+    this.weatherTable = {
+      "200-232": "wi wi-owm-200", // thunderstorm
+      "300-321": "wi wi-owm-301", // drizzle 
+      "500-532": "wi wi-owm-302", // rain 
+      "600-621": "wi wi-owm-621", // snow 
+      "800-800": "wi wi-owm-800", // sunny 
+      "801-804": "wi wi-owm-804",  // cloudy 
+      "904-904": "wi wi-owm-904" // hot 
     }
 
-  
   } // ngOnInit() 
 
   getWeather(receivedCode) {
@@ -65,13 +77,11 @@ export class ProfilePage {
     this.weather.getWeatherByCity(cityID).subscribe(data => {   
       // transform temp to string 
       var responseTemp = data.main.temp.toString(); 
-      console.log("C'est une object? " + JSON.stringify(data)); 
+      console.log("Weather object: " + JSON.stringify(data)); 
       this.showTemp = responseTemp.substr(0,2);
 
       // get weather.id 
       var weatherID = data.weather[0].id; 
-      
-      console.log(weatherID);
       
       var pL = /(\d+)-\d+/;
       var pR = /\d+-(\d+)/;
@@ -80,96 +90,188 @@ export class ProfilePage {
          
          var startGetal = pL.exec(key)[1];
          var eindGetal = pR.exec(key)[1];
-         
-         console.log("Startgetal: " + startGetal);
-        console.log("Eindgetal: " + eindGetal);
 
          if(weatherID >= Number.parseInt(startGetal) && weatherID <= Number.parseInt(eindGetal) || weatherID == Number.parseInt(startGetal)) 
-         {
-           this.correctIcon = value; 
-           console.log("code is: " + value);
-         }
-         else { 
-           console.log("blablalbasllbab");
-         }
-      }
-    })
-  }
+          {
+            this.correctIcon = value; 
+            console.log("code is: " + value);
+          }
+        } 
+      }) // getWeatherByCity
+    } // getWeather
 
  
   cityChange(code) {
+    
     this.receivedCode = code; 
-    console.log(this.receivedCode); 
-
+    this.fetchingData = true; // start spinner to indicate fetching time and date 
+        
     if(this.receivedCode == 'Europe/Amsterdam') {
       clearTimeout(this.checkTime);
-      this.gotTime = false;
-      this.startTime(this.receivedCode); 
-
-      this.getWeather(this.receivedCode); 
       
-    } else {
-      clearTimeout(this.checkTime); 
-      this.gotTime = false; 
       this.startTime(this.receivedCode); 
 
+      // only show Tilburg date, hide Yogja date 
+      this.fetchedTilburgDate = true; 
+      this.fetchedYogjaDate = false; 
+      this.fetchedTime = false;
+
+      // get weather 
+      this.getWeather(this.receivedCode); 
+
+    } else {
+      
+      clearTimeout(this.checkTime); 
+      
+      this.startTime(this.receivedCode); 
+
+      /// only show Yogja date, hide Tilburg date 
+      this.fetchedYogjaDate = true;
+      this.fetchedTilburgDate = false; 
+      this.fetchedTime = false; 
+      
       this.getWeather(this.receivedCode); 
     }
-  }
+  } // cityChange 
 
   
   getTime(code) {
-    this.time.getTimeByCity(code).subscribe(
-      data => {
-          console.log('Get Time response ' + JSON.stringify(data));
+      console.log("WHAT IS THE TIME?? " + code); 
+    switch(code) {
+      case 'Asia/Jakarta': 
+        this.time.getTimeByCity(code).subscribe(
+        data => {
+          /*console.log('Get Time response ' + JSON.stringify(data));
           var foreignTime = new Date(data.timestamp*1000);
+          console.log("Deze tijd dan? " + foreignTime); 
           var foreignHours = foreignTime.getUTCHours();
           this.finalTimeStamp = foreignTime.setHours(foreignHours);
-          var finalTime = new Date(this.finalTimeStamp);
+          var finalTime = new Date(this.finalTimeStamp);*/
+
+          var finalTime = new Date(data.formatted);
           
           console.log("finalTime: " + finalTime); 
 
-          // set correctDate 
-          this.correctDate = this.formatDate(finalTime); 
-      
+
           // SET GLOBALTIME 
-          this.globalTime = finalTime; 
+          this.yogjaTime = finalTime; 
+          
+          // set correctDate 
+          this.correctYogjaDate = this.formatDate(finalTime); 
+      
+          },
+          err => {
+            console.log(err);
+          },
+          () => console.log('Completed!')
+      ) 
+      break; 
+
+      case 'Europe/Amsterdam': 
+        this.time.getTimeByCity(code).subscribe(
+        data => {
+         /* console.log('Get Time response ' + JSON.stringify(data));
+          var foreignTime = new Date(data.timestamp*1000);
+          console.log("Deze tijd dan? " + foreignTime); 
+          var foreignHours = foreignTime.getUTCHours();
+          console.log("foreignHours? " + foreignHours); 
+          this.finalTimeStamp = foreignTime.setHours(foreignHours);
+          console.log("finalTimeStamp: " + this.finalTimeStamp); */ 
+          var finalTime = new Date(data.formatted);
+           
+          // SET GLOBALTIME 
+          //this.tilburgTime = new Date(this.finalTimeStamp);
+          this.tilburgTime = finalTime; 
+          
+          console.log("finalTime: " + finalTime); 
+          
+          // set correctDate 
+          this.correctTilburgDate = this.formatDate(finalTime); 
+          this.fetchedTilburgDate = true; 
+          
+        
         },
         err => {
-          this.showAlert(); 
+          console.log(err);
         },
         () => console.log('Completed!')
-    );
+      );
+    } // switch 
   } // getTime() 
 
 
-  startTime(cityCode) {
-  
-    if (this.gotTime == false) {
-      this.getTime(cityCode); 
-      this.gotTime = true; 
-    } 
-  
-    this.checkTime = setTimeout(() => {
+startTime(cityCode) {
+   
+    console.log("GIVE ME THE GODDAMN CODE: " + cityCode);
 
-      var hours = this.globalTime.getHours();
-      var localMinutes = new Date().getMinutes(); 
-      this.globalTime.setMinutes(localMinutes);
-      var minutes = this.globalTime.getMinutes();
-      var localSeconds = new Date().getSeconds();
-      this.globalTime.setSeconds(localSeconds);
-      var seconds = this.globalTime.getSeconds();
+    switch(cityCode){
+      case 'Asia/Jakarta': 
+        if (this.gotYogjaTime == false) {
+          this.getTime(cityCode); 
+          this.gotYogjaTime = true; 
+          
+          this.fetchedYogjaDate = true; 
+        } 
+  
+        this.checkTime = setTimeout(() => {
+
+        var hours = this.yogjaTime.getHours();
+        var localMinutes = new Date().getMinutes(); 
+        this.yogjaTime.setMinutes(localMinutes);
+        var minutes = this.yogjaTime.getMinutes();
+        var localSeconds = new Date().getSeconds();
+        this.yogjaTime.setSeconds(localSeconds);
+        var seconds = this.yogjaTime.getSeconds();
+        
+        this.correctTime = moment(this.yogjaTime).format('hh:mm:ss a');
+        this.fetchingData = false; 
+        this.fetchedTime = true; 
       
-      this.correctTime = moment(this.globalTime).format('hh:mm:ss a');
-      var consoleTime = moment(this.globalTime).format('hh:mm:ss a'); 
-      console.log(consoleTime);
+        var consoleTime = moment(this.yogjaTime).format('hh:mm:ss a'); 
+        console.log(consoleTime);
 
-      this.startTime(cityCode);
-    }, 1000) 
+        this.startTime(cityCode);
+        }, 1000) 
+        
+        break; 
+      
+      case 'Europe/Amsterdam': 
+
+        if (this.gotTilburgTime == false) {
+          this.getTime(cityCode); 
+          this.gotTilburgTime = true; 
+
+          this.fetchedTilburgDate = true; 
+         
+        } 
+  
+        this.checkTime = setTimeout(() => {
+
+        var hours = this.tilburgTime.getHours();
+        var localMinutes = new Date().getMinutes(); 
+        this.tilburgTime.setMinutes(localMinutes);
+        var minutes = this.tilburgTime.getMinutes();
+        var localSeconds = new Date().getSeconds();
+        this.tilburgTime.setSeconds(localSeconds);
+        var seconds = this.tilburgTime.getSeconds();
+        
+        this.correctTime = moment(this.tilburgTime).format('hh:mm:ss a');
+        this.fetchingData = false; 
+        this.fetchedTime = true; 
+       
+        
+        var consoleTime = moment(this.tilburgTime).format('hh:mm:ss a'); 
+        console.log(consoleTime);
+
+        this.startTime(cityCode);
+      }, 1000) 
+    } // end of switch 
+
   }
 
 
   formatDate(date) {
+    
     var monthNames = [
     "January", "February", "March",
     "April", "May", "June", "July",

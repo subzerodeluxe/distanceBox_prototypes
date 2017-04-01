@@ -12,9 +12,12 @@
 <ion-content padding>
   <!--<h3 *ngIf="auth.authState">Hi {{auth.userName}}!</h3>-->
     
-  <div class="time">{{ correctTime }}</div>
-  <div class="date">{{ correctDate }}</div>
-  <div class="city">{{ selectedCity }}</div>
+  <div *ngIf="fetchedTime" class="time">{{ correctTime }}</div>
+    <div *ngIf="fetchingData" class="fetching-time">
+      <ion-spinner></ion-spinner>
+    </div>
+  <div *ngIf="fetchedYogjaDate" class="date">{{ correctYogjaDate }}</div>
+  <div *ngIf="fetchedTilburgDate" class="date">{{ correctTilburgDate }}</div>
 
   <ion-list>
     <ion-item>
@@ -28,14 +31,12 @@
     </ion-item>
   </ion-list>
 
-<ion-list>
-  <ion-item>
-    <ion-icon isActive="true"  [name]="correctIcon" item-left></ion-icon>
-    {{ showTemp }}  &deg;C 
-  </ion-item>
-</ion-list>
-
-<i class="wi wi-day-sunny"></i>
+  <ion-list>
+    <ion-item>
+      <i [class]="correctIcon"></i> 
+      <p class="showTemp" *ngIf="correctIcon">{{ showTemp }} &deg;C</p> 
+    </ion-item>
+  </ion-list>
 
   <ion-fab right bottom>
     <button ion-fab color="light" [navPush]="blackJackTips">
