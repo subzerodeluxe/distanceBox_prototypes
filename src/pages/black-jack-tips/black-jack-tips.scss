@@ -1,3 +1,41 @@
 page-black-jack-tips {
 
+    .weather-box {
+        text-align: center; 
+    }
+
+    .correctIcon {
+        margin-right: 65px; 
+    }
+
+    .showTemp {
+        font-weight: bold;
+        font-size: 20px; 
+        margin-top: -20px;
+        margin-left: 45px;
+    }
+
+    .selectedCity {
+        font-size: 14px; 
+        font-weight: bold; 
+        padding-bottom: 5px;
+    }
+    
+    .weather-date {
+        font-size: 12px; 
+        padding-bottom: 8px; 
+    }
+    .weather-description {
+        //font-weight: bold;
+        font-size: 16px; 
+
+        margin-top: 5px;
+    }
+
+     .fetching-time {
+        width: 100%;
+        text-align: center;
+        padding-top: 0x;
+    }
+
 }

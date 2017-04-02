@@ -117,7 +117,7 @@ export class ProfilePage {
       this.fetchedTime = false;
 
       // get weather 
-      this.getWeather(this.receivedCode); 
+     // this.getWeather(this.receivedCode); 
 
     } else {
       
@@ -130,12 +130,13 @@ export class ProfilePage {
       this.fetchedTilburgDate = false; 
       this.fetchedTime = false; 
       
-      this.getWeather(this.receivedCode); 
+      //this.getWeather(this.receivedCode); 
     }
   } // cityChange 
 
   
   getTime(code) {
+      //
       console.log("WHAT IS THE TIME?? " + code); 
     switch(code) {
       case 'Asia/Jakarta': 
@@ -146,11 +147,11 @@ export class ProfilePage {
           console.log("Deze tijd dan? " + foreignTime); 
           var foreignHours = foreignTime.getUTCHours();
           this.finalTimeStamp = foreignTime.setHours(foreignHours);
-          var finalTime = new Date(this.finalTimeStamp);*/
+          var finalTime = new Date(this.finalTimeStamp);*/ 
 
           var finalTime = new Date(data.formatted);
           
-          console.log("finalTime: " + finalTime); 
+          console.log("Yogja Time: " + finalTime); 
 
 
           // SET GLOBALTIME 
@@ -170,20 +171,21 @@ export class ProfilePage {
       case 'Europe/Amsterdam': 
         this.time.getTimeByCity(code).subscribe(
         data => {
-         /* console.log('Get Time response ' + JSON.stringify(data));
+          /*console.log('Get Time response ' + JSON.stringify(data));
           var foreignTime = new Date(data.timestamp*1000);
           console.log("Deze tijd dan? " + foreignTime); 
           var foreignHours = foreignTime.getUTCHours();
           console.log("foreignHours? " + foreignHours); 
           this.finalTimeStamp = foreignTime.setHours(foreignHours);
           console.log("finalTimeStamp: " + this.finalTimeStamp); */ 
+        
           var finalTime = new Date(data.formatted);
            
           // SET GLOBALTIME 
           //this.tilburgTime = new Date(this.finalTimeStamp);
           this.tilburgTime = finalTime; 
           
-          console.log("finalTime: " + finalTime); 
+          console.log("Tilburg Time: " + finalTime); 
           
           // set correctDate 
           this.correctTilburgDate = this.formatDate(finalTime); 
@@ -202,7 +204,7 @@ export class ProfilePage {
 
 startTime(cityCode) {
    
-    console.log("GIVE ME THE GODDAMN CODE: " + cityCode);
+    //console.log("GIVE ME THE GODDAMN CODE: " + cityCode);
 
     switch(cityCode){
       case 'Asia/Jakarta': 
@@ -216,6 +218,8 @@ startTime(cityCode) {
         this.checkTime = setTimeout(() => {
 
         var hours = this.yogjaTime.getHours();
+        this.yogjaTime.setHours(hours);
+        console.log("Yogja hours: " + hours); 
         var localMinutes = new Date().getMinutes(); 
         this.yogjaTime.setMinutes(localMinutes);
         var minutes = this.yogjaTime.getMinutes();
@@ -247,7 +251,10 @@ startTime(cityCode) {
   
         this.checkTime = setTimeout(() => {
 
-        var hours = this.tilburgTime.getHours();
+
+        var localHours = this.tilburgTime.getHours();
+        console.log("Tilburg hours: " + localHours);
+        this.tilburgTime.setHours(localHours); 
         var localMinutes = new Date().getMinutes(); 
         this.tilburgTime.setMinutes(localMinutes);
         var minutes = this.tilburgTime.getMinutes();

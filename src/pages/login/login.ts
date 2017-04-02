@@ -27,7 +27,8 @@ export class LoginPage {
     loadMessage.present(); 
 
     this.auth.loginWithFacebook().subscribe((success) => {
-      loadMessage.dismiss(); 
+      loadMessage.dismiss(); // hide signing you in message 
+      console.log(success); 
       this.navCtrl.setRoot(ProfilePage);  
     }, err => {
       loadMessage.dismiss();
@@ -37,7 +38,7 @@ export class LoginPage {
 
   showAlert(message: string) {
     const alert = this.alertCtrl.create({
-      title: 'Oh my ..',
+      title: 'Bad connection?',
       subTitle: message,
       buttons: ['OK']
     });
