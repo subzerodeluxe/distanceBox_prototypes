@@ -1,6 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, EventEmitter, Injectable, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, AlertController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
+import { AuthProviders, AngularFire, FirebaseAuthState, AuthMethods, FirebaseApp } from 'angularfire2'; //Add FirebaseApp
+
 
 // import pages
 import { TabsPage } from '../pages/tabs/tabs';
@@ -13,6 +15,10 @@ import { AuthService } from "../providers/auth-service";
 import * as moment from 'moment';
 import { TimezoneService } from "../providers/timezone-service";
 
+// import firebase
+import { Facebook } from 'ionic-native';
+import { auth } from 'firebase'; //needed for the FacebookAuthProvider
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -23,7 +29,7 @@ export class MyApp {
   tabsPage = TabsPage; 
   profilePage = ProfilePage; 
   wordsPage = WordsPage; 
-  
+
   @ViewChild('nav') nav: NavController;
 
   correctDate: any; 
@@ -36,9 +42,28 @@ export class MyApp {
   selectedCity: any; 
   placeholder: any; 
 
-  constructor(platform: Platform, private auth: AuthService, 
-  public time: TimezoneService, public alertCtrl: AlertController, private menuCtrl: MenuController) {
+  private authState: FirebaseAuthState;
+  public onAuth: EventEmitter<FirebaseAuthState> = new EventEmitter();
+  public firebase : any;
 
+  constructor(platform: Platform, private auth: AuthService, 
+  public time: TimezoneService, public alertCtrl: AlertController, private menuCtrl: MenuController,
+  @Inject(FirebaseApp)firebase: any,
+  private af: AngularFire,) {
+
+    this.af.auth.subscribe((state: FirebaseAuthState) => {
+      this.authState = state;
+      this.onAuth.emit(state);
+    });
+
+    firebase.auth().onAuthStateChanged(user => {
+      if(user) { // when user is authenticated 
+        this.nav.setRoot(this.profilePage);
+        console.log("User object: " + JSON.stringify(user)); 
+      } else {
+        this.nav.setRoot(this.loginPage); 
+      }
+    });
     platform.ready().then(() => {
       StatusBar.styleDefault();
       Splashscreen.hide();
