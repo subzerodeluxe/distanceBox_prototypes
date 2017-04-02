@@ -1,0 +1,4 @@
+<!--<p>Are we connnected? {{ (status| async).$value }}</p>--> 
+
+<p *ngIf="!(status | async).$value">Oh dear ... no internet connection!</p>
+

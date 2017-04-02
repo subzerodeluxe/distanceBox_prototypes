@@ -8,7 +8,7 @@
 
 <ion-content padding>
 
-
+ <connection></connection>
   <ion-list>
     <ion-item>
       <ion-label>Choose city</ion-label>
@@ -33,8 +33,12 @@
       <div *ngIf="fetchingData" class="fetching-time">
         <ion-spinner></ion-spinner>
       </div>
-      <div *ngIf="correctTilburgDate && correctTilburgTime" class="weather-date">
+      <div *ngIf="correctTilburgDate && correctTilburgTime && fetchedTilburgData" class="weather-date">
         {{ correctTilburgDate }} {{ correctTilburgTime }}
+      </div>
+
+       <div *ngIf="correctYogjaDate && correctYogjaTime && fetchedYogjaData" class="weather-date">
+        {{ correctYogjaDate }} {{ correctYogjaTime }}
       </div>
 
       <div class="correctIcon">

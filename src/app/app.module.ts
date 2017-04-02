@@ -22,8 +22,7 @@ import { BlackJackTipsPage } from '../pages/black-jack-tips/black-jack-tips';
 
 // import components 
 import { StoryModalPage } from '../components/story-modal/story-modal';
-
-
+import { ConnectionComponent } from "../components/connection/connection";
 
 // setup Firebase credentials 
 export const firebaseConfig = {
@@ -46,7 +45,8 @@ export const firebaseConfig = {
     ProfilePage,
     WordsPage,
     BlackJackTipsPage,
-    StoryModalPage
+    StoryModalPage,
+    ConnectionComponent
     
   ],
   imports: [
