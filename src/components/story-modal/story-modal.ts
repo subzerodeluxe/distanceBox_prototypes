@@ -15,21 +15,20 @@ export class StoryModalPage {
    public storyName     : any     = '';
    public storyTags     : any     = [];
    public storySummary  : any     = '';
-   public storyMood  : any     = '';
+   public storyMood     : any     = '';
    public storyImage    : any     = '';
    public storyId       : string  = '';
    public isEditable    : boolean = false;
 
 
    constructor(
-      public navCtrl        : NavController,
-      public params         : NavParams,
-      private _FB 	        : FormBuilder,
-      private _FIRE         : AngularFire,
-      public viewCtrl       : ViewController
-   )
+      public navCtrl: NavController,
+      public params: NavParams,
+      private formBuilder: FormBuilder,
+      private ngFire: AngularFire,
+      public viewCtrl: ViewController)
    {
-      this.form 	    = _FB.group({
+      this.form 	    = formBuilder.group({
          'summary' 	    : ['', Validators.minLength(10)],
          'name'         : ['', Validators.required],
          'mood'         : ['', Validators.required],
@@ -37,11 +36,10 @@ export class StoryModalPage {
          'tags' 	    : ['', Validators.required]
       });
 
-      this.stories = this._FIRE.database.list('/stories');
+      this.stories = this.ngFire.database.list('/stories');
 
 
-      if(params.get('isEdited'))
-      {
+      if(params.get('isEdited')) {
           let story 		= params.get('story'),
               k;
 
@@ -49,11 +47,11 @@ export class StoryModalPage {
           this.storySummary     = story.summary;
           this.storyMood        = story.mood; 
           this.storyImage   	  = story.image; 
-          this.storyId          = story.$key;
+          this.storyId          = story.id;
 
+          console.log("StoryID: " + JSON.stringify(this.storyId)); 
 
-          for(k in story.tags)
-          {
+          for(k in story.tags){
              this.storyTags.push(story.tags[k].name);
           }
 
@@ -63,8 +61,7 @@ export class StoryModalPage {
 
 
 
-   saveStory(val)
-   {
+   saveStory(val) {
       let title	    : string	= this.form.controls["name"].value,
           summary   : string 	= this.form.controls["summary"].value,
           mood   : string 	= this.form.controls["mood"].value,
@@ -74,45 +71,37 @@ export class StoryModalPage {
   	      k         : any;
 
 
-    for(k in tags)
-    {
-       types.push({
-          "name" : tags[k]
-       });
-    }
+            for(k in tags) {
+            types.push({
+                "name" : tags[k]
+                });
+            }
 
 
-    
+        if( this.isEditable){
+            this.stories.update(this.storyId, {
+                title    : title,
+                summary  : summary,
+                mood     : mood,
+                tags     : types,
+                image    : image 
+            });
+        } else {
+            this.stories.push({
+                title    : title,
+                summary  : summary,
+                mood     : mood,
+                tags     : types,
+                image    : image 
+            });
+        }
 
-
-   if(this.isEditable)
-   {
-      this.stories.update(this.storyId, {
-         title    : title,
-         summary  : summary,
-         mood     : mood,
-         tags     : types,
-         image    : image 
-      });
-   }
-   else
-   {
-      this.stories.push({
-         title    : title,
-         summary  : summary,
-         mood     : mood,
-         tags     : types,
-         image    : image 
-      });
-   }
-
-   this.closeModal();
+        this.closeModal();
    }
 
 
 
-   closeModal()
-   {
+   closeModal() {
       this.viewCtrl.dismiss();
    }
 

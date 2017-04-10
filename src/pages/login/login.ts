@@ -28,7 +28,7 @@ export class LoginPage {
 
     this.auth.loginWithFacebook().subscribe((success) => {
       loadMessage.dismiss(); // hide signing you in message 
-      console.log(success); 
+      
       this.navCtrl.setRoot(ProfilePage);  
     }, err => {
       loadMessage.dismiss();
