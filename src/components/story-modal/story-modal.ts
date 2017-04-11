@@ -46,7 +46,7 @@ export class StoryModalPage {
           this.storyName        = story.title;
           this.storySummary     = story.summary;
           this.storyMood        = story.mood; 
-          this.storyImage   	  = story.image; 
+          this.storyImage       = story.image; 
           this.storyId          = story.id;
 
           console.log("StoryID: " + JSON.stringify(this.storyId)); 
@@ -62,13 +62,13 @@ export class StoryModalPage {
 
 
    saveStory(val) {
-      let title	    : string	= this.form.controls["name"].value,
-          summary   : string 	= this.form.controls["summary"].value,
-          mood   : string 	= this.form.controls["mood"].value,
-          tags    : any       = this.form.controls["tags"].value,
-          image  : string	= this.form.controls["image"].value,
-          types     : any       = [],
-  	      k         : any;
+      let title: string	    = this.form.controls["name"].value,
+          summary: string 	= this.form.controls["summary"].value,
+          mood: string 	    = this.form.controls["mood"].value,
+          tags: any         = this.form.controls["tags"].value,
+          image: string	    = this.form.controls["image"].value,
+          types: any        = [],
+  	      k: any;
 
 
             for(k in tags) {

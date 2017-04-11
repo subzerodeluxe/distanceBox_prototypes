@@ -11,8 +11,28 @@
 
 </ion-header>
 
+<ion-content padding scrollbar-y-auto>
+<countdown #countdown [timeInSeconds]="inputSeconds"></countdown>
 
-<ion-content padding>
-  <p>Learn words
-  </p>
+  <ion-item>
+    <ion-input [(ngModel)]="inputSeconds" 
+    max="300"
+    min="5" 
+    type="number" 
+    placeholder="How many seconds?"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Set Date</ion-label>
+    <ion-datetime 
+      displayFormat="DD/MM/YYYY" 
+      pickerformat="DD MMMM YYYY" 
+      min="2017-04-08"
+      max="2017-04-21"
+      [(ngModel)]="inputDate"> 
+  </ion-datetime> 
+
+  </ion-item>
+
+  <button ion-button full outline (click)="setTimer()">Confirm</button>
 </ion-content>

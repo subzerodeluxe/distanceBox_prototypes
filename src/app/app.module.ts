@@ -23,6 +23,9 @@ import { BlackJackTipsPage } from '../pages/black-jack-tips/black-jack-tips';
 // import components 
 import { StoryModalPage } from '../components/story-modal/story-modal';
 import { ConnectionComponent } from "../components/connection/connection";
+import { ClockComponent } from "../components/clock/clock";
+import { CountdownComponent } from "../components/countdown/countdown";
+
 
 // setup Firebase credentials 
 export const firebaseConfig = {
@@ -46,7 +49,9 @@ export const firebaseConfig = {
     WordsPage,
     BlackJackTipsPage,
     StoryModalPage,
-    ConnectionComponent
+    ConnectionComponent,
+    ClockComponent ,
+    CountdownComponent
     
   ],
   imports: [
@@ -65,7 +70,9 @@ export const firebaseConfig = {
     ProfilePage,
     WordsPage,
     BlackJackTipsPage,
-    StoryModalPage
+    StoryModalPage,
+    ClockComponent,
+    CountdownComponent
     
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
